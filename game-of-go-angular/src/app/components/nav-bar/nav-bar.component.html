@@ -1,0 +1,14 @@
+<header>
+    <nav>
+        <h1><a routerLink="/">iGO</a></h1>
+        <a routerLink="/play" routerLinkActive="active">Play</a>
+        <a routerLink="/rankings" routerLinkActive="active">Rankings</a>
+        <a routerLink="/history" routerLinkActive="active">History</a>
+        <!-- Add more tab links as needed -->
+        <div class="right-aligned">
+            <span class="me-5" *ngIf="loggedIn">Hello, {{ loginName }}!</span>
+            <button *ngIf="!loggedIn" class="btn btn-outline-light" (click)="login()">Log in</button>
+            <button *ngIf="loggedIn" class="btn btn-outline-light" (click)="logout()">Log out</button>
+        </div>
+    </nav>
+  </header>

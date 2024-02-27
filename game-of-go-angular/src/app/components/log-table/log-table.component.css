@@ -1,0 +1,10 @@
+#log-table {
+    width: 100%;
+}
+
+#table-wrapper {
+    padding: 10px;
+    background-color: #212529;
+    height: 250px;
+    overflow: auto;
+}

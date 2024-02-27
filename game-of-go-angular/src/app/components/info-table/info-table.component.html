@@ -1,0 +1,19 @@
+<div id="table-wrapper">
+    <table class="table table-hover table-dark" id="info-table">
+        <tr>
+            <th></th>
+            <th width="40%">BLACK</th>
+            <th width="40%">WHITE (+{{ gameConfig.komi }})</th>
+        </tr>
+        <tr>
+            <th>Player</th>
+            <td>{{ blackName }}</td>
+            <td>{{ whiteName }}</td>
+        </tr>
+        <tr>
+            <th>Captures</th>
+            <td>{{ blackCaptures }}</td>
+            <td>{{ whiteCaptures }}</td>
+        </tr>
+    </table>
+</div>

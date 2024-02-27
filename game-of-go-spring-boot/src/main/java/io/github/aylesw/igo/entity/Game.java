@@ -27,6 +27,6 @@ public class Game {
     private Double whiteScore;
     private String blackTerritory;
     private String whiteTerritory;
-    private String blackEloChange;
-    private String whiteEloChange;
+    private Integer blackEloChange;
+    private Integer whiteEloChange;
 }

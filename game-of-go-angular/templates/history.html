@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iGO - Game Of Go Online</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: beige;
+            height: 100%;
+        }
+
+        header {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav h3 {
+            margin: 0;
+            margin-left: 20px;
+            margin-right: 40px; /* Add margin to create space between title and links */
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-right: 30px; /* Adjust margin for spacing between links */
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            margin-left: auto; /* Push the login button to the right */
+            margin-right: 20px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .history-item {
+            background-color: #f3f5ed;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .history-item .heading > *,
+        .history-item .details > * {
+            flex: 1;
+        }
+
+        .black-stone {
+            background-color: black;
+            min-width: 50px;
+            max-width: 50px;
+            min-height: 50px;
+            max-height: 50px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <h3>iGO</h3>
+            <a href="#">Play</a>
+            <a href="#">Rankings</a>
+            <a href="#">History</a>
+            <!-- Add more tab links as needed -->
+            <button class="btn btn-outline-light login-btn">Login</button>
+        </nav>
+    </header>
+
+    <div class="container d-flex flex-column align-items-center">
+        <h1 class="my-4">HISTORY</h1>
+        <div class="row" style="width: 70%">
+            <div class="col-md-6 col-sm-12">
+                <div class="row">
+                    <label class="col-6">Total games:</label>
+                    <span class="col-6">12</span>
+                </div>
+                <div class="row">
+                    <label class="col-6">Wins:</label>
+                    <span class="col-6">1</span>
+                </div>                
+                <div class="row">
+                    <label class="col-6">Losses:</label>
+                    <span class="col-6">11</span>
+                </div>
+                <div class="row">
+                    <label class="col-6">Draws:</label>
+                    <span class="col-6">0</span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="row">
+                    <label class="col-6">Winning rate:</label>
+                    <span class="col-6">8.33%</span>
+                </div>
+                <div class="row">
+                    <label class="col-6">ELO:</label>
+                    <span class="col-6">1010</span>
+                </div>                
+                <div class="row">
+                    <label class="col-6">Rank type:</label>
+                    <span class="col-6">11K</span>
+                </div>
+                <div class="row">
+                    <label class="col-6">Ranking:</label>
+                    <span class="col-6">54,321</span>
+                </div>
+            </div>
+        </div>
+        <div id="history-panel" class="mt-3" style="width: 70%;">
+            <div class="history-item">
+                <div class="heading d-flex mb-3 px-3">
+                    <span>#game-id</span>
+                    <span class="text-center">vs. opponent</span>
+                    <span class="text-right">yyyy-MM-dd HH:mm</span>
+                </div>
+                <div class="details d-flex justify-content-center align-items-center">
+                    <div class="d-flex flex-column align-items-center">
+                        <div class="black-stone"></div>
+                        <span>13x13</span>
+                    </div>
+                    <span>VICTORY</span>
+                    <div>
+                        Black score: 20<br>
+                        White score: 21.5
+                    </div>
+                    <div class="d-flex flex-column align-items-center">
+                        <button class="btn btn-dark" style="width: 50%;">Replay</button>
+                    </div>
+                </div>
+            </div>
+            <div class="history-item">
+                <div class="heading d-flex mb-3 px-3">
+                    <span class="game-id">#game-id</span>
+                    <span class="opponent text-center">vs. opponent</span>
+                    <span class="time text-right">yyyy-MM-dd HH:mm</span>
+                </div>
+                <div class="details d-flex justify-content-center align-items-center">
+                    <div class="d-flex flex-column align-items-center">
+                        <div class="black-stone"></div>
+                        <span class="board-size">13x13</span>
+                    </div>
+                    <span class="result">VICTORY</span>
+                    <div class="scores">
+                        Black score: 20<br>
+                        White score: 21.5
+                    </div>
+                    <div class="d-flex flex-column align-items-center">
+                        <button class="replay-btn btn btn-dark" style="width: 50%;">Replay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 iGO. All rights reserved.
+    </footer>
+
+    <!-- Include Bootstrap JS (Optional) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

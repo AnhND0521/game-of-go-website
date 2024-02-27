@@ -1,0 +1,16 @@
+#config-form > div > label {
+    font-weight: bold;
+}
+
+#config-form input, #config-form select {
+    max-width: 150px;
+    max-height: 30px;
+}
+
+#online-list {
+    background-color: white;
+    display: block;
+    width: 80%;
+    height: 300px;
+    overflow: auto;
+}

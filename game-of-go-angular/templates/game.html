@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iGO - Game Of Go Online</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: beige;
+            height: 100%;
+        }
+
+        header {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav h3 {
+            margin: 0;
+            margin-left: 20px;
+            margin-right: 40px; /* Add margin to create space between title and links */
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-right: 30px; /* Adjust margin for spacing between links */
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            margin-left: auto; /* Push the login button to the right */
+            margin-right: 20px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        canvas {
+            background-color: white;
+            background-image: url('game-board-background.jpg');
+            background-size: cover;
+            width: 75%;
+        }
+
+        #info-table, #log-table {
+            width: 80%
+        }
+
+        #info-table tr th, #info-table tr td {
+            text-align: center;
+        }
+
+        #log-table {
+            display: block;
+            height: 250px;
+            overflow: auto;
+        }
+
+        #chat-panel {
+            background-color: white;
+            width: 80%;
+            height: 150px;
+            overflow: auto;
+        }
+
+        .chat-msg {
+            text-wrap: wrap;
+            margin: 5px;
+        }
+
+        #chat-box {
+            width: 80%;
+            margin-top: 10px;
+            display: flex;
+        }
+
+        #chat-input {
+            flex: 1;
+            width: 100%;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <h3>iGO</h3>
+            <a href="#">Play</a>
+            <a href="#">Rankings</a>
+            <a href="#">History</a>
+            <!-- Add more tab links as needed -->
+            <button class="btn btn-outline-light login-btn">Login</button>
+        </nav>
+    </header>
+
+    <div class="row mt-4" style="width: 100%;">
+        <div class="col-md-7 col-sm-12 d-flex flex-column justify-content-center align-items-center" style="height: 80vh;">
+            <h3 class="mt-3">ABC</h3>
+            <canvas id="game-canvas"></canvas>
+            <div class="mt-3">
+                <button class="btn btn-dark">Pass</button>
+                <button class="btn btn-dark">Resign</button>
+                <button class="btn btn-dark">Offer a draw</button>
+                <button class="btn btn-dark">Start new game</button>
+            </div>
+        </div>  
+        <div class="col-md-5 col-sm-12 d-flex flex-column align-items-center">
+            <h4>Information</h4>
+            <table class="table table-hover table-dark" id="info-table">
+                <tr>
+                    <th></th>
+                    <th width="40%">BLACK</th>
+                    <th width="40%">WHITE (+6.5)</th>
+                </tr>
+                <tr>
+                    <th>Player</th>
+                    <td>Aylesworth</td>
+                    <td>Ohayou</td>
+                </tr>
+                <tr>
+                    <th>Captures</th>
+                    <td>5</td>
+                    <td>10</td>
+                </tr>
+            </table>
+            <h4>Log table</h4>
+            <table  class="table table-hover table-dark" id="log-table">
+                <tr>
+                    <th>#</th>
+                    <th width="50%">Player</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>BLACK</td>
+                    <td>plays E5</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>BLACK</td>
+                    <td>plays E5</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>BLACK</td>
+                    <td>plays E5</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>BLACK</td>
+                    <td>plays E5</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>BLACK</td>
+                    <td>plays E5</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>BLACK</td>
+                    <td>plays E5</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>BLACK</td>
+                    <td>plays E5</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>BLACK</td>
+                    <td>plays E5</td>
+                </tr>
+            </table>
+            <h4>Chat</h4>
+            <div id="chat-panel">
+                <p class="chat-msg">[10:23] Aylesworth: hello bro</p>
+                <p class="chat-msg">[10:23] Aylesworth: hello bro</p>
+                <p class="chat-msg">[10:23] Aylesworth: hello bro</p>
+                <p class="chat-msg">[10:23] Aylesworth: hello bro</p>
+                <p class="chat-msg">[10:23] Aylesworth: hello bro</p>
+                <p class="chat-msg">[10:23] Aylesworth: hello bro</p>
+                <p class="chat-msg">[10:23] Aylesworth: hello bro</p>
+                <p class="chat-msg">[10:23] Aylesworth: hello bro</p>
+                <p class="chat-msg">[10:23] Aylesworth: hello bro</p>
+            </div>
+            <div id="chat-box">
+                <input type="text" id="chat-input" placeholder="Chat something...">
+                <button id="send-chat" class="btn btn-dark btn-sm">Send</button> 
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 iGO. All rights reserved.
+    </footer>
+
+    <!-- Include Bootstrap JS (Optional) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        let canvas = document.getElementById("game-canvas");
+        canvas.height = canvas.width;
+    </script>
+</body>
+</html>

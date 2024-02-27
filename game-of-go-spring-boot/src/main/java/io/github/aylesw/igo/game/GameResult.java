@@ -18,4 +18,6 @@ public class GameResult {
     private double whiteScore;
     private List<String> blackTerritory;
     private List<String> whiteTerritory;
+    private int blackEloChange;
+    private int whiteEloChange;
 }

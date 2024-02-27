@@ -15,4 +15,5 @@ public class PlayerDto {
     private String email;
     private Integer elo;
     private String rankType;
+    private Long ranking;
 }

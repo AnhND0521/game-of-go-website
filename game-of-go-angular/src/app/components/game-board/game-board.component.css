@@ -1,0 +1,6 @@
+canvas {
+    background-color: white;
+    background-image: url('game-board-background.jpg');
+    background-size: cover;
+    width: 600px;
+}

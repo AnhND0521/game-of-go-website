@@ -5,6 +5,7 @@ import io.github.aylesw.igo.dto.SessionData;
 import io.github.aylesw.igo.entity.Account;
 import io.github.aylesw.igo.service.StatusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.TreeMap;
 @Service
 @RequiredArgsConstructor
 public class StatusServiceImpl implements StatusService {
+    private final SimpMessagingTemplate messagingTemplate;
     private Map<String, SessionData> sessionData = new TreeMap<>();
 
     @Override
@@ -45,5 +47,10 @@ public class StatusServiceImpl implements StatusService {
     @Override
     public SessionData getSessionData(String username) {
         return sessionData.get(username);
+    }
+
+    @Override
+    public void broadcastOnlinePlayerList() {
+        messagingTemplate.convertAndSend("/topic/online-list", getOnlinePlayerList());
     }
 }

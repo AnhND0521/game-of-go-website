@@ -1,0 +1,24 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: beige;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.login-container {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px; /* Adjust the width as needed */
+}
+
+.login-container h2 {
+    text-align: center;
+    color: #333;
+}

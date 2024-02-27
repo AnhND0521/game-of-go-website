@@ -1,0 +1,31 @@
+<div class="row mt-4" style="width: 100%;">
+    <div id="game-panel" class="col-md-7 col-sm-12 d-flex flex-column justify-content-center align-items-center" style="height: 80vh;">
+        <h3 class="my-3">{{ prompt }}</h3>
+        <app-game-board #gameBoard
+            [boardSize]="gameInfo.gameConfig?.boardSize ?? 0" 
+            [playerColor]="myColor" 
+            [shadowDisabled]="!myTurn"
+            (mouseClick)="move($event)"
+        ></app-game-board>
+        <div id="button-bar" class="mt-3">
+            <button class="btn btn-dark" [disabled]="!myTurn" (click)="pass()">Pass</button>
+            <button class="btn btn-dark" (click)="resign()">Resign</button>
+            <button class="btn btn-dark" (click)="offerDraw()">Offer a draw</button>
+            <button class="btn btn-dark" [disabled]="gameFinished" (click)="offerRestart()">Restart</button>
+        </div>
+    </div>  
+    <div id="side-panel" class="col-md-5 col-sm-12 d-flex flex-column align-items-center justify-content-center">
+        <h4>Information</h4>
+        <app-info-table 
+            [blackName]="gameInfo.blackPlayer?.username ?? ''" 
+            [whiteName]="gameInfo.whitePlayer?.username ?? ''" 
+            [blackCaptures]="captures[1]" 
+            [whiteCaptures]="captures[2]"
+            [gameConfig]="gameInfo.gameConfig!"
+        ></app-info-table>
+        <h4>Log table</h4>
+        <app-log-table></app-log-table>
+        <h4>Chat</h4>
+        <app-chat-box></app-chat-box>
+    </div>
+</div>

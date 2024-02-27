@@ -1,7 +1,9 @@
 package io.github.aylesw.igo.game;
 
+import io.github.aylesw.igo.dto.PlayerDto;
 import io.github.aylesw.igo.entity.Account;
 import io.github.aylesw.igo.entity.Game;
+import org.modelmapper.ModelMapper;
 
 import java.time.Instant;
 import java.util.*;
@@ -20,7 +22,9 @@ public class SimpleGameInstance implements GameInstance {
     private List<Integer> block;
     private List<Integer> captured;
     private List<Integer> lastCaptured;
+    private int lastColor;
     private int lastMove;
+    private int nextColor;
     private int blackCaptures;
     private int whiteCaptures;
     private int consecutivePass;
@@ -30,6 +34,7 @@ public class SimpleGameInstance implements GameInstance {
     private List<String> blackTerritory;
     private List<String> whiteTerritory;
     private String endingContext;
+    private List<String> chatLog;
 
     public SimpleGameInstance(Account blackPlayer, Account whitePlayer, GameConfig config) {
         this.id = UUID.randomUUID().toString();
@@ -42,12 +47,17 @@ public class SimpleGameInstance implements GameInstance {
         this.block = new ArrayList<>();
         this.captured = new ArrayList<>();
         this.lastCaptured = new ArrayList<>();
+        this.lastColor = 0;
+        this.lastMove = -1;
+        this.nextColor = BLACK;
         this.consecutivePass = 0;
+        this.log = new StringBuilder();
         this.blackScore = 0;
         this.whiteScore = 0;
         this.blackTerritory = new ArrayList<>();
         this.whiteTerritory = new ArrayList<>();
         this.endingContext = "NORMAL";
+        this.chatLog = new ArrayList<>();
         initializeBoard();
     }
 
@@ -137,8 +147,8 @@ public class SimpleGameInstance implements GameInstance {
         boolean capturable = false;
 
         for (int dir : directions) {
-            if (board[pos + dir] != 3 - color) continue;
-            count(pos + dir, 3 - color);
+            if (board[pos + dir] != oppositeColor(color)) continue;
+            count(pos + dir, oppositeColor(color));
             if (liberties.size() == 0) {
                 restoreBoard();
                 capturable = true;
@@ -162,15 +172,15 @@ public class SimpleGameInstance implements GameInstance {
 
         // check if the move breaks Ko rule
         board[pos] = color;
-        capture(3 - color);
+        capture(oppositeColor(color));
         if (captured.size() == 1 && lastCaptured.size() == 1
                 && captured.get(0) == lastMove && pos == lastCaptured.get(0)) {
-            board[captured.get(0)] = 3 - color;
+            board[captured.get(0)] = oppositeColor(color);
             board[pos] = EMPTY;
             return false;
         }
         for (int c : captured) {
-            board[c] = 3 - color;
+            board[c] = oppositeColor(color);
         }
         board[pos] = EMPTY;
         return true;
@@ -180,7 +190,7 @@ public class SimpleGameInstance implements GameInstance {
         int bestCount = 0;
         int bestLiberty = liberties.get(0);
 
-        var libertiesCopy = liberties;
+        List<Integer> libertiesCopy = new ArrayList<>(liberties);
         for (int liberty : libertiesCopy) {
             if (libertiesIfPut(liberty, color) > bestCount) {
                 bestLiberty = liberty;
@@ -246,7 +256,13 @@ public class SimpleGameInstance implements GameInstance {
         }
     }
 
+    private boolean isFinished() {
+        return nextColor == 0;
+    }
+
     private String toCoords(int pos) {
+        if (pos < 0 || pos >= boardRange * boardRange) return null;
+
         int row = pos / boardRange;
         int col = pos % boardRange;
 
@@ -254,6 +270,11 @@ public class SimpleGameInstance implements GameInstance {
         if (colSymbol >= 'I') colSymbol++;
 
         return "" + colSymbol + row;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override
@@ -271,7 +292,7 @@ public class SimpleGameInstance implements GameInstance {
     }
 
     @Override
-    public boolean play(String coords, int color) {
+    public boolean play(int color, String coords) {
         char colSymbol = coords.charAt(0);
         int col = colSymbol - 'A' + 1;
         if (colSymbol >= 'J') col--;
@@ -281,24 +302,27 @@ public class SimpleGameInstance implements GameInstance {
         if (canMove(pos, color)) {
             consecutivePass = 0;
             board[pos] = color;
-            capture(3 - color);
+            capture(oppositeColor(color));
             printBoard();
+            lastColor = color;
             lastMove = pos;
-            lastCaptured = captured;
+            lastCaptured.clear();
+            lastCaptured.addAll(captured);
             if (color == BLACK)
-                whiteCaptures += lastCaptured.size();
-            else
                 blackCaptures += lastCaptured.size();
+            else
+                whiteCaptures += lastCaptured.size();
 
             log.append(color).append('+').append(toCoords(lastMove));
             if (lastCaptured.size() > 0) {
-                log.append('/').append(3 - color).append('-');
+                log.append('/').append(oppositeColor(color)).append('-');
                 for (int i = 0; i < lastCaptured.size(); i++) {
                     if (i > 0) log.append(',');
                     log.append(toCoords(lastCaptured.get(i)));
                 }
             }
             log.append(' ');
+            nextColor = oppositeColor(color);
             return true;
         }
         return false;
@@ -315,7 +339,7 @@ public class SimpleGameInstance implements GameInstance {
             pos = random.nextInt(boardRange * boardRange);
             coords = toCoords(pos);
             count++;
-        } while (count < maxAttempts && !play(coords, color));
+        } while (count < maxAttempts && !play(color, coords));
 
         if (count == maxAttempts) {
             return "PA";
@@ -343,8 +367,8 @@ public class SimpleGameInstance implements GameInstance {
         // capture opponent's group
         for (int pos = 0; pos < boardRange * boardRange; pos++) {
             int piece = board[pos];
-            if ((piece & (3 - color)) > 0) {
-                count(pos, 3 - color);
+            if ((piece & (oppositeColor(color))) > 0) {
+                count(pos, oppositeColor(color));
                 if (liberties.size() == 1) {
                     int targetPos = liberties.get(0);
                     restoreBoard();
@@ -410,10 +434,10 @@ public class SimpleGameInstance implements GameInstance {
         // surround opponent's group
         for (int pos = 0; pos < boardRange * boardRange; pos++) {
             int piece = board[pos];
-            if ((piece & (3 - color)) > 0) {
-                count(pos, 3 - color);
+            if ((piece & (oppositeColor(color))) > 0) {
+                count(pos, oppositeColor(color));
                 if (liberties.size() > 1) {
-                    int bestLiberty = evaluate(3 - color);
+                    int bestLiberty = evaluate(oppositeColor(color));
                     restoreBoard();
                     if (canMove(bestLiberty, color) && libertiesIfPut(bestLiberty, color) > 1) {
                         bestMove = bestLiberty;
@@ -434,7 +458,7 @@ public class SimpleGameInstance implements GameInstance {
         for (int pos = 0; pos < boardRange * boardRange; pos++) {
             int piece = board[pos];
             if (piece == OFF_BOARD) continue;
-            if ((piece & (3 - color)) > 0) {
+            if ((piece & (oppositeColor(color))) > 0) {
                 targetOne = pos - boardRange + 1;
                 targetTwo = pos - boardRange - 1;
                 if ((board[targetOne] & color) > 0 && (board[targetTwo] & color) > 0 && canMove(pos - boardRange, color)) {
@@ -511,12 +535,12 @@ public class SimpleGameInstance implements GameInstance {
 
             String coords = toCoords(bestMove);
             System.out.println("chosen move: " + coords);
-            play(coords, color);
+            play(color, coords);
             return coords;
         } else {
             int rd = random.nextInt(4);
             String move = (rd == 0) ? "PA" : randomMove(color);
-            System.out.println("move: "+ move);
+            System.out.println("move: " + move);
             return move;
         }
     }
@@ -525,6 +549,10 @@ public class SimpleGameInstance implements GameInstance {
     public int pass(int color) {
         consecutivePass++;
         log.append(color).append("=PA ");
+        lastColor = color;
+        lastMove = -1;
+        if (consecutivePass == 2) nextColor = 0;
+        else nextColor = oppositeColor(color);
         return consecutivePass;
     }
 
@@ -536,7 +564,10 @@ public class SimpleGameInstance implements GameInstance {
         else
             whiteScore = -1;
         log.append(color).append("=RS ");
+        lastColor = color;
+        lastMove = -1;
         endingContext = "RESIGNED";
+        nextColor = 0;
     }
 
     @Override
@@ -544,7 +575,10 @@ public class SimpleGameInstance implements GameInstance {
         calculateScore();
         blackScore = whiteScore = -1;
         log.append(color).append("=DR ");
+        lastColor = color;
+        lastMove = -1;
         endingContext = "DRAWN";
+        nextColor = 0;
     }
 
     @Override
@@ -555,7 +589,24 @@ public class SimpleGameInstance implements GameInstance {
         else
             whiteScore = -1;
         log.append(color).append("=TO ");
+        lastColor = color;
+        lastMove = -1;
         endingContext = "TIMEOUT";
+        nextColor = 0;
+    }
+
+    @Override
+    public void leave(int color) {
+        calculateScore();
+        if (color == BLACK)
+            blackScore = -1;
+        else
+            whiteScore = -1;
+        log.append(color).append("=LV ");
+        lastColor = color;
+        lastMove = -1;
+        endingContext = "LEFT";
+        nextColor = 0;
     }
 
     @Override
@@ -592,8 +643,8 @@ public class SimpleGameInstance implements GameInstance {
             }
         }
 
-        blackScore += whiteCaptures;
-        whiteScore += blackCaptures;
+        blackScore += blackCaptures;
+        whiteScore += whiteCaptures;
     }
 
     @Override
@@ -613,8 +664,13 @@ public class SimpleGameInstance implements GameInstance {
 
     @Override
     public void reset() {
-        id = UUID.randomUUID().toString();
         timestamp = Instant.now().getEpochSecond();
+        log = new StringBuilder();
+        blackCaptures = whiteCaptures = 0;
+        lastColor = 0;
+        lastMove = -1;
+        nextColor = BLACK;
+        chatLog.clear();
         clearBoard();
     }
 
@@ -632,5 +688,37 @@ public class SimpleGameInstance implements GameInstance {
                 .blackTerritory(String.join(" ", blackTerritory))
                 .whiteTerritory(String.join(" ", whiteTerritory))
                 .build();
+    }
+
+    @Override
+    public GameInfo getInfo() {
+        ModelMapper mapper = new ModelMapper();
+        return GameInfo.builder()
+                .gameId(id)
+                .blackPlayer(mapper.map(blackPlayer, PlayerDto.class))
+                .whitePlayer(mapper.map(whitePlayer, PlayerDto.class))
+                .gameConfig(config)
+                .gameState(getState())
+                .gameResult(isFinished() ? getResult() : null)
+                .build();
+    }
+
+    @Override
+    public GameState getState() {
+        return GameState.builder()
+                .gameBoard(board)
+                .blackCaptures(blackCaptures)
+                .whiteCaptures(whiteCaptures)
+                .log(log.toString().trim())
+                .lastColor(lastColor)
+                .lastMove(toCoords(lastMove))
+                .nextColor(nextColor)
+                .chatLog(chatLog)
+                .build();
+    }
+
+    @Override
+    public void addChat(String chatMessage) {
+        chatLog.add(chatMessage);
     }
 }

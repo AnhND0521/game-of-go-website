@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iGO - Game Of Go Online</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: beige;
+            height: 100%;
+        }
+
+        header {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav h3 {
+            margin: 0;
+            margin-left: 20px;
+            margin-right: 40px; /* Add margin to create space between title and links */
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-right: 30px; /* Adjust margin for spacing between links */
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            margin-left: auto; /* Push the login button to the right */
+            margin-right: 20px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #config-form > div > label {
+            font-weight: bold;
+        }
+
+        #config-form input, #config-form select {
+            max-width: 150px;
+            max-height: 30px;
+        }
+
+        #online-list {
+            background-color: white;
+            display: block;
+            width: 80%;
+            height: 300px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <h3>iGO</h3>
+            <a href="#">Play</a>
+            <a href="#">Rankings</a>
+            <a href="#">History</a>
+            <!-- Add more tab links as needed -->
+            <button class="btn btn-outline-light login-btn">Login</button>
+        </nav>
+    </header>
+
+    <!-- Content goes here -->
+    <div class="container">
+        <h1 class="text-center mt-5">PLAY</h1>
+        <div class="row">
+            <div class="col-md-7 col-sm-12 d-flex flex-column justify-content-center pl-5" style="height: 60vh;">
+                <h3 class="mb-4">Configurations</h3>
+                <form id="config-form">
+                    <div id="config-bsize" class="row my-2">
+                        <label class="col-md-3">Board size:</label>
+                        <div class="col-md-9 px-0">
+                            <input type="radio" name="bsize" id="bsize-9" value="9">
+                            <label for="bsize-9" class="mr-2">9x9</label>
+                            <input type="radio" name="bsize" id="bsize-13" value="13">
+                            <label for="bsize-13" class="mr-2">13x13</label>
+                            <input type="radio" name="bsize" id="bsize-19" value="19" checked>
+                            <label for="bsize-19" class="mr-2" >19x19</label><br>
+                            <input type="radio" name="bsize" id="bsize-custom" value="-1">
+                            <label for="bsize-custom" class="mr-2">Custom</label>
+                            <input type="number" min="5" max="25" value="10" disabled>
+                        </div>
+                    </div>
+                    <div id="config-komi" class="row my-2">
+                        <label class="col-md-3" for="komi">Komi:</label>
+                        <input class="col-md-9" type="number" id="komi" value="6.5">
+                    </div>
+                    <div id="config-time" class="row my-2">
+                        <label class="col-md-3" for="time">Time control:</label>
+                        <select class="col-md-9" name="time" id="time">
+                            <option>None</option>
+                            <option>Byoyomi</option>
+                        </select>
+                    </div>
+                    <div id="config-ranked" class="row my-2">
+                        <label class="col-md-3" for="ranked">Ranked game:</label>
+                        <div class="col-md-9 px-0">
+                            <input type="checkbox" id="ranked" checked>
+                            <label for="ranked">Ranked</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-dark mr-2">Auto-matching</button>
+                    <button type="submit" class="btn btn-dark">Play with CPU</button>
+                </form>
+            </div>
+            <div class="col-md-5 col-sm-12 d-flex flex-column justify-content-center" style="height: 60vh;">
+                <h3 class="mb-4">Online Players</h3>
+                <input type="text" id="search" name="search" placeholder="&#x1F50E;Search for player..." style="width: 80%;">
+                <table id="online-list" class="table table-hover mt-3">
+                        <tr>
+                            <th>Player</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        <tr>
+                            <td>ayles</td>
+                            <td>Available</td>
+                            <td><button class="btn btn-dark btn-sm">Invite</button></td>
+                        </tr>
+                        <tr>
+                            <td>ayles</td>
+                            <td>Available</td>
+                            <td><button class="btn btn-dark btn-sm">Invite</button></td>
+                        </tr>
+                        <tr>
+                            <td>ayles</td>
+                            <td>Available</td>
+                            <td><button class="btn btn-dark btn-sm">Invite</button></td>
+                        </tr>
+                        <tr>
+                            <td>ayles</td>
+                            <td>Available</td>
+                            <td><button class="btn btn-dark btn-sm">Invite</button></td>
+                        </tr>
+                        <tr>
+                            <td>ayles</td>
+                            <td>Available</td>
+                            <td><button class="btn btn-dark btn-sm">Invite</button></td>
+                        </tr>
+                        <tr>
+                            <td>ayles</td>
+                            <td>Available</td>
+                            <td><button class="btn btn-dark btn-sm">Invite</button></td>
+                        </tr>
+                        <tr>
+                            <td>ayles</td>
+                            <td>Available</td>
+                            <td><button class="btn btn-dark btn-sm">Invite</button></td>
+                        </tr>
+                        <tr>
+                            <td>ayles</td>
+                            <td>Available</td>
+                            <td><button class="btn btn-dark btn-sm">Invite</button></td>
+                        </tr>
+                        <tr>
+                            <td>ayles</td>
+                            <td>Available</td>
+                            <td><button class="btn btn-dark btn-sm">Invite</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 iGO. All rights reserved.
+    </footer>
+
+    <!-- Include Bootstrap JS (Optional) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

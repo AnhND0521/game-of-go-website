@@ -1,0 +1,60 @@
+<div class="container">
+    <h1 class="text-center mt-5">PLAY</h1>
+    <div class="row">
+        <div class="col-md-7 col-sm-12 d-flex flex-column justify-content-center ps-5" style="height: 60vh;">
+            <h3 class="mb-4">Configurations</h3>
+            <form #configForm="ngForm" id="config-form">
+                <div id="config-bsize" class="row my-3">
+                    <label class="col-md-3">Board size:</label>
+                    <div class="col-md-9 px-0">
+                        <input type="radio" name="bsize" id="bsize-9" [(ngModel)]="configValues.boardSize" value="9">
+                        <label for="bsize-9" class="ms-1 me-2">9x9</label>
+                        <input type="radio" name="bsize" id="bsize-13" [(ngModel)]="configValues.boardSize" value="13">
+                        <label for="bsize-13" class="ms-1 me-2">13x13</label>
+                        <input type="radio" name="bsize" id="bsize-19" [(ngModel)]="configValues.boardSize" value="19" checked>
+                        <label for="bsize-19" class="ms-1 me-2" >19x19</label><br>
+                        <input type="radio" name="bsize" id="bsize-custom" [(ngModel)]="configValues.boardSize" value="-1">
+                        <label for="bsize-custom" class="ms-1 me-2">Custom</label>
+                        <input type="number" min="5" max="25" [(ngModel)]="configValues.customSize" value="10" [disabled]="configValues.boardSize !== '-1'">
+                    </div>
+                </div>
+                <div id="config-komi" class="row my-3">
+                    <label class="col-md-3" for="komi">Komi:</label>
+                    <input class="col-md-9" type="number" name="komi" id="komi" [(ngModel)]="configValues.komi" value="6.5">
+                </div>
+                <div id="config-time" class="row my-3">
+                    <label class="col-md-3" for="time">Time control:</label>
+                    <select class="col-md-9" name="time" id="time" [(ngModel)]="configValues.timeControl">
+                        <option>None</option>
+                        <option>Byoyomi</option>
+                    </select>
+                </div>
+                <div id="config-ranked" class="row my-3">
+                    <label class="col-md-3" for="ranked">Ranked game:</label>
+                    <div class="col-md-9 px-0">
+                        <input type="checkbox" name="ranked" id="ranked" [(ngModel)]="configValues.ranked" checked>
+                        <label for="ranked" class="ms-1">Ranked</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-dark me-2">Auto-matching</button>
+                <button type="submit" class="btn btn-dark" (click)="playWithBot()">Play with Bot</button>
+            </form>
+        </div>
+        <div class="col-md-5 col-sm-12 d-flex flex-column justify-content-center" style="height: 60vh;">
+            <h3 class="mb-4">Online Players</h3>
+            <input type="text" id="search" name="search" placeholder="Search for player..." style="width: 80%;">
+            <table id="online-list" class="table table-hover mt-3 px-2 py-2">
+                    <tr>
+                        <th style="width: 40%;">Player</th>
+                        <th style="width: 40%;">Status</th>
+                        <th style="width: 20%;">Actions</th>
+                    </tr>
+                    <tr *ngFor="let player of onlineList">
+                        <td>{{ player.username }}</td>
+                        <td>{{ getStatusIcon(player.status) }} {{ player.status }}</td>
+                        <td><button *ngIf="player.status === 'Available'" class="btn btn-dark btn-sm" (click)="sendInvitation(player.username)">Invite</button></td>
+                    </tr>
+            </table>
+        </div>
+    </div>
+</div>

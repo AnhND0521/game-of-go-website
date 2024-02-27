@@ -1,0 +1,12 @@
+#button-bar button {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+#side-panel > * {
+    width: 80%;
+}
+
+#side-panel > h4 {
+    margin-top: 20px;
+}

@@ -11,4 +11,5 @@ public interface StatusService {
     void addOnlinePlayer(Account account, String accessId);
     void removeOnlinePlayer(String username);
     SessionData getSessionData(String username);
+    void broadcastOnlinePlayerList();
 }

@@ -18,7 +18,7 @@ public class SessionData {
     private String sessionId;
     private Account account;
     private String status;
-    private String opponent;
+    private Account opponent;
     private GameInstance game;
     private List<String> pendingChallengers;
 }

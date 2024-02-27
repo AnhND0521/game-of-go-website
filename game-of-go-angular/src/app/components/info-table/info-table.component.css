@@ -1,0 +1,13 @@
+#info-table {
+    width: 100%;
+}
+
+#info-table tr th, #info-table tr td {
+    text-align: center;
+}
+
+#table-wrapper {
+    padding: 10px;
+    background-color: #212529;
+    overflow: auto;
+}

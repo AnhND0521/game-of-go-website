@@ -1,7 +1,7 @@
 package io.github.aylesw.igo.controller;
 
-import io.github.aylesw.igo.dto.GameSetupInfo;
-import io.github.aylesw.igo.dto.InviteMessage;
+import io.github.aylesw.igo.dto.*;
+import io.github.aylesw.igo.game.GameInfo;
 import io.github.aylesw.igo.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -16,6 +16,12 @@ public class GameController {
 
     @MessageMapping("/invitation/send")
     public void sendInvitation(InviteMessage message) {
+        if (message.getTargetPlayer().equals("$BOT")) {
+            message.setReply("ACCEPT");
+            messagingTemplate.convertAndSend("/user/" + message.getSourcePlayer() + "/queue/invitation-reply", message);
+            gameService.setupGame(message);
+            return;
+        }
         messagingTemplate.convertAndSend("/user/" + message.getTargetPlayer() + "/queue/invitation", message);
     }
 
@@ -23,9 +29,28 @@ public class GameController {
     public void replyToInvitation(InviteMessage message) {
         messagingTemplate.convertAndSend("/user/" + message.getSourcePlayer() + "/queue/invitation-reply", message);
         if (message.getReply().equals("ACCEPT")) {
-            GameSetupInfo setupInfo = gameService.setupGame(message);
-            messagingTemplate.convertAndSend("/user/" + message.getSourcePlayer() + "/queue/game/new", setupInfo);
-            messagingTemplate.convertAndSend("/user/" + message.getTargetPlayer() + "/queue/game/new", setupInfo);
+            gameService.setupGame(message);
         }
+    }
+
+    @MessageMapping("/game/info")
+    public void getGameInfo(GetGameInfoMessage message) {
+        GameInfo info = gameService.getGameInfo(message.getGameId());
+        messagingTemplate.convertAndSend("/user/" + message.getUsername() + "/queue/game/info", info);
+    }
+
+    @MessageMapping("/game/move")
+    public void move(MoveMessage message) {
+        gameService.move(message);
+    }
+
+    @MessageMapping("/game/interrupt/request")
+    public void requestInterrupt(InterruptMessage message) {
+        gameService.requestInterrupt(message);
+    }
+
+    @MessageMapping("/game/interrupt/reply")
+    public void replyToInterrupt(InterruptMessage message) {
+        gameService.replyToInterrupt(message);
     }
 }

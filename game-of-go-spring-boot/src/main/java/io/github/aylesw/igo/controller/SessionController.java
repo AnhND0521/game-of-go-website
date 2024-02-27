@@ -1,8 +1,10 @@
 package io.github.aylesw.igo.controller;
 
 import io.github.aylesw.igo.dto.AuthData;
+import io.github.aylesw.igo.dto.InterruptMessage;
 import io.github.aylesw.igo.dto.SessionData;
 import io.github.aylesw.igo.entity.Account;
+import io.github.aylesw.igo.service.GameService;
 import io.github.aylesw.igo.service.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -18,6 +20,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @RequiredArgsConstructor
 public class SessionController {
     private final StatusService statusService;
+    private final GameService gameService;
     private final SimpMessagingTemplate messagingTemplate;
 
     @EventListener
@@ -36,8 +39,11 @@ public class SessionController {
         String username = (String) headers.getSessionAttributes().get("username");
         if (username == null) return;
         SessionData data = statusService.getSessionData(username);
-        if (data != null) data.setStatus("Offline");
-        broadcastOnlineList();
+        if (data != null) {
+            data.setStatus("Offline");
+            gameService.handlePlayerLeave(username);
+        }
+        statusService.broadcastOnlinePlayerList();
     }
 
     @MessageMapping("/auth")
@@ -51,7 +57,7 @@ public class SessionController {
         sessionData.setStatus("Available");
         messagingTemplate.convertAndSend("/topic/auth/" + authData.getAccessId(), "OK");
         headerAccessor.getSessionAttributes().put("username", authData.getUsername());
-        broadcastOnlineList();
+        statusService.broadcastOnlinePlayerList();
     }
 
     @MessageMapping("/online-list")
@@ -62,10 +68,6 @@ public class SessionController {
     @MessageMapping("/end-session")
     public void endSession(String username) {
         statusService.removeOnlinePlayer(username);
-        broadcastOnlineList();
-    }
-
-    private void broadcastOnlineList() {
-        messagingTemplate.convertAndSend("/topic/online-list", statusService.getOnlinePlayerList());
+        statusService.broadcastOnlinePlayerList();
     }
 }
