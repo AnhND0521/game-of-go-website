@@ -1,1 +1,21 @@
-<p>rankings works!</p>
+<div class="container d-flex flex-column align-items-center mb-5">
+    <h1 class="my-4">Rankings</h1>
+    <table class="table table-striped table-dark table-hover">
+        <thead>
+            <tr>
+                <th>Ranking</th>
+                <th>Player</th>
+                <th class="text-end">ELO</th>
+                <th class="text-center">Rank type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let player of rankings">
+                <td>{{ player.ranking }} {{ (player.ranking === 1) ? '&#x1f947;' : (player.ranking === 2) ? '&#x1f948;' : (player.ranking === 3) ? '&#x1f949;' : '' }}</td>
+                <td>{{ player.username }}</td>
+                <td class="text-end">{{ player.elo }}</td>
+                <td class="text-center">{{ player.rankType }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

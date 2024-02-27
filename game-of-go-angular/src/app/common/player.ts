@@ -4,4 +4,5 @@ export class Player {
     email?: string;
     elo?: number;
     rankType?: string;
+    ranking?: number;
 }
