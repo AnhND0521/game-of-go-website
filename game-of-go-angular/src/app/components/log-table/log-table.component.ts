@@ -48,6 +48,7 @@ export class LogTableComponent {
 
   reset() {
     this.logItems = [];
+    this.count = 0;
   }
 }
 
