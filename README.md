@@ -146,6 +146,10 @@ Project Link: [https://github.com/Aylesworth/game-of-go-website](https://github.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[product-screenshot-01]: screenshots/screenshot-01.png
+[product-screenshot-02]: screenshots/screenshot-02.png
+[product-screenshot-03]: screenshots/screenshot-03.png
+[product-screenshot-04]: screenshots/screenshot-04.png
 [angular-badge]: https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white
 [angular-url]: https://angular.io/
 [typescript-badge]: https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white
