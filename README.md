@@ -49,10 +49,10 @@
 
 Go, also known as Weiqi in China and Baduk in Korea, is an ancient strategy board game that has captivated players for centuries. The depth of Go strategy challenges programmers to create a sophisticated backend while the minimalistic nature of the game allows for an elegant user interface.
 
-[![Product Screen Shot 01][screenshots/screenshot-01.png]]()
-[![Product Screen Shot 02][screenshots/screenshot-02.png]]()
-[![Product Screen Shot 03][screenshots/screenshot-03.png]]()
-[![Product Screen Shot 04][screenshots/screenshot-04.png]]()
+[![Product Screen Shot 01][product-screenshot-01]]()
+[![Product Screen Shot 02][product-screenshot-02]]()
+[![Product Screen Shot 03][product-screenshot-03]]()
+[![Product Screen Shot 04][product-screenshot-04]]()
 
 **Key Features**:
 - ***Play with Friends***:
