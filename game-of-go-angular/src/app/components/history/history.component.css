@@ -1,0 +1,64 @@
+.stats {
+    margin-left: 120px;
+}
+
+.history-item {
+    background-color: #f3f5ed;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.history-item .heading > *,
+.history-item .details > * {
+    flex: 1;
+}
+
+.game-id {
+    font-size: 9pt;
+}
+
+.black-stone {
+    background-color: black;
+    min-width: 50px;
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
+}
+
+.white-stone {
+    background-color: white;
+    min-width: 50px;
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
+}
+
+.game-result {
+    font-size: 18pt;
+}
+
+.victory {
+    color: darkblue;
+}
+
+.defeat {
+    color: darkred;
+}
+
+.draw {
+    color: green;
+}
+
+.elo-increase {
+    color: green;
+}
+
+.elo-decrease {
+    color: red;
+}

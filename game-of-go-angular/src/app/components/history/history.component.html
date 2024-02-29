@@ -1,0 +1,64 @@
+<div class="container d-flex flex-column align-items-center mb-5">
+    <h1 class="my-4">HISTORY</h1>
+    <div class="stats row" style="width: 60%">
+        <div class="col-md-6 col-sm-12">
+            <div class="row">
+                <label class="col-6">Total games:</label>
+                <span class="col-6">{{ statistics.totalGames }}</span>
+            </div>
+            <div class="row">
+                <label class="col-6">Wins:</label>
+                <span class="col-6">{{ statistics.wins }}</span>
+            </div>                
+            <div class="row">
+                <label class="col-6">Losses:</label>
+                <span class="col-6">{{ statistics.losses }}</span>
+            </div>
+            <div class="row">
+                <label class="col-6">Draws:</label>
+                <span class="col-6">{{ statistics.draws }}</span>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="row">
+                <label class="col-6">Winning rate:</label>
+                <span class="col-6">{{ statistics.winningRate | percent:'1.2-2' }}</span>
+            </div>
+            <div class="row">
+                <label class="col-6">ELO:</label>
+                <span class="col-6">{{ statistics.elo }}</span>
+            </div>                
+            <div class="row">
+                <label class="col-6">Rank type:</label>
+                <span class="col-6">{{ statistics.rankType }}</span>
+            </div>
+            <div class="row">
+                <label class="col-6">Ranking:</label>
+                <span class="col-6">{{ statistics.ranking }}</span>
+            </div>
+        </div>
+    </div>
+    <div id="history-panel" class="mt-3" style="width: 70%;">
+        <div class="history-item" *ngFor="let item of historyItems">
+            <div class="heading d-flex mb-3 px-3">
+                <span class="game-time">{{ item.time | date:'yyyy-MM-dd HH:mm' }}</span>
+                <span class="game-opponent text-center">vs. {{ item.opponent?.username }}</span>
+                <a class="text-end" routerLink="history/record/{{ item.id }}">View record</a>
+            </div>
+            <div class="details d-flex justify-content-center align-items-center">
+                <div class="d-flex flex-column align-items-center">
+                    <div [ngClass]="{ 'black-stone': item.stoneColor === 1, 'white-stone': item.stoneColor === 2 }"></div>
+                    <span class="game-board-size">{{ item.boardSize }}x{{ item.boardSize }}</span>
+                </div>
+                <span class="game-result {{ item.result }} pb-3 text-end">{{ item.result?.toUpperCase() }}</span>
+                <span class="game-elo-change pb-3 ms-3 text-start" [ngClass]="{ 'elo-increase': item.eloChange! > 0, 'elo-decrease': item.eloChange! < 0 }">
+                    {{ item.eloChange! >= 0 ? '+' : '' }}{{ item.eloChange ?? 0 }} ELO
+                </span>
+                <span class="game-scores pb-3 text-center">
+                    Black score: {{ item.blackScore }}<br>
+                    White score: {{ item.whiteScore }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

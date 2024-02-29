@@ -30,7 +30,7 @@ export class PlayMenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginName = this.accountService.getLoginName();
-
+    
     if (this.loginName !== undefined) {
       this.stompService.watch(`/topic/auth/${this.accountService.getAccessId()}`)
       .subscribe((msg) => {
@@ -112,6 +112,10 @@ export class PlayMenuComponent implements OnInit {
         gameConfig: this.getGameConfig()
       })
     });
+  }
+
+  autoMatching() {
+    window.alert('Functionality is under development');
   }
 
   playWithBot() {

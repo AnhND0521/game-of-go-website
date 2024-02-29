@@ -12,15 +12,12 @@ import io.github.aylesw.igo.service.GameService;
 import io.github.aylesw.igo.service.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static io.github.aylesw.igo.game.GameConstants.*;
 

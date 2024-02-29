@@ -18,6 +18,7 @@ import { InfoTableComponent } from './components/info-table/info-table.component
 import { LogTableComponent } from './components/log-table/log-table.component';
 import { ChatBoxComponent } from './components/chat-box/chat-box.component';
 import { RankingsComponent } from './components/rankings/rankings.component';
+import { HistoryComponent } from './components/history/history.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { RankingsComponent } from './components/rankings/rankings.component';
     InfoTableComponent,
     LogTableComponent,
     ChatBoxComponent,
-    RankingsComponent
+    RankingsComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,
